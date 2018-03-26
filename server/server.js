@@ -13,8 +13,18 @@ var io = socketIO(server);
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => { // represents individual socket
-  console.log('New User Connected');
-  
+  console.log('New User Connected');  // on connection
+
+  socket.emit('newMessage', {
+    from: 'John',
+    text: 'See you then',
+    createdAt: 123123    
+  });
+
+  socket.on('createMessage', (message) => {
+    console.log('createMessage', message);
+  });
+
   socket.on('disconnect', () => {
     console.log('User was Disconnected');
   });
