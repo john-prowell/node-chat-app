@@ -15,6 +15,20 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => { // represents individual socket
   console.log('New User Connected');  // on connection
 
+   // send message to only new socket connection
+  socket.emit('newMessage', {
+    from: 'Admin',
+    text: 'Thanks for joining!',
+    createdAt: new Date().getTime()
+  });
+   
+  // send message to everyone but new socket connection
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    text: 'New user joined',
+    createdAt: new Date().getTime()
+  });
+
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
     io.emit('newMessage', { // sends message to everyone connected
@@ -22,6 +36,11 @@ io.on('connection', (socket) => { // represents individual socket
       text: message.text,
       createdAt: new Date().getTime()
     });
+    // socket.broadcast.emit('newMessage', { // sends message to everyone connected except the one who created the event
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
   });
 
   socket.on('disconnect', () => {
