@@ -22,10 +22,10 @@ io.on('connection', (socket) => { // represents individual socket
   // send message to everyone but new socket connection
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
-  socket.on('createMessage', (message) => {
+  socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
     io.emit('newMessage', generateMessage(message.from, message.text));
-    
+    callback('This is from the Server');
     // socket.broadcast.emit('newMessage', { // sends message to everyone connected except the one who created the event
     //   from: message.from,
     //   text: message.text,
