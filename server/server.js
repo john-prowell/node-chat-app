@@ -22,16 +22,19 @@ io.on('connection', (socket) => { // represents individual socket
   // send message to everyone but new socket connection
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
+  // createMessage listener
   // createMessage called when form submitted
   socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
     io.emit('newMessage', generateMessage(message.from, message.text));
-    callback('This is from the Server');    
+    callback();    
   });
-  
+ 
+  // createLocationMessage listener
   // createLocationMessage called and location coords passed in from user
   socket.on('createLocationMessage', (coords) => {
-    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+    console.log('createLocationMessage', coords);
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));    
   });
 
   // when user disconnects
