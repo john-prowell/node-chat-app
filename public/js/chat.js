@@ -16,11 +16,11 @@ function scrollToBottom () {
   }
 }
 
-socket.on('connect', () => { // when server connects
+socket.on('connect', () => { // when socket connects to server
   console.log('Connected to Server');
-  var params = jQuery.deparam(window.location.search);
+  var params = jQuery.deparam(window.location.search); // grabs params from url and converts to object
   
-  socket.emit('join', params, (err) => {
+  socket.emit('join', params, (err) => { // emits join and passes params and err callback
     if (err) {
       alert(err);
       window.location = '/';
@@ -30,8 +30,18 @@ socket.on('connect', () => { // when server connects
   });
 });
 
-socket.on('disconnect', () => { // server disconnects
-  console.log('Disconnected from Server');
+socket.on('disconnect', () => { // server disconnects  
+    console.log('Disconnected from Server');
+  }
+);
+
+socket.on('updateUserList', (users) => {
+  console.log('Users list', users);
+  var ol = jQuery('<ol></ol>');
+  users.forEach((user) => {
+    ol.append(jQuery('<li></li>').text(user));
+  });
+  jQuery('#users').html(ol);
 });
 
 // When newMessage called
